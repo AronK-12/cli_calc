@@ -1,6 +1,6 @@
 import argparse
 
-debug_equation:str = "1+2-3*4 / 20"
+debug_equation:str = "1+2-3*4/20"
 debug:bool = False
 
 def split_equation(eq:str) -> list:
@@ -47,49 +47,35 @@ def solve_operation(num1:float, num2:float, op:str) -> float:
         case _:
             return ValueError
 
+def solve_MDAS(equation, operands):
+    index:int = 0
+    while operands[0] in equation or operands[1] in equation:
+        number_1:float
+        number_2:float
+        operand:str
+
+        if equation[index] == operands[0] or equation[index] == operands[1]:
+            number_1 = float(equation[index - 1])
+            number_2 = float(equation[index + 1])
+            operand = equation[index]
+
+            result:float = solve_operation(number_1, number_2, operand)
+
+            equation.pop(index)
+            equation.pop(index)
+            equation[index - 1] = str(result)
+
+            return equation
+        index += 1
+
 def solver(eq:list) -> list:
     new_list:list = eq
 
-    index:int = 0
-
     while "*" in new_list or "/" in new_list:
-        number_1:float
-        operand:str
-        number_2:float
-
-        if new_list[index] == "*" or new_list[index] == "/":
-            number_1 = float(new_list[index - 1])
-            number_2 = float(new_list[index + 1])
-            operand = new_list[index]
-
-            result:float = solve_operation(number_1, number_2, operand)
-
-            new_list.pop(index)
-            new_list.pop(index)
-            new_list[index - 1] = str(result)
-            index -= 2
-        index += 1
-
-    index:int = 0
+        new_list = solve_MDAS(new_list, ["*", "/"])
 
     while "+" in new_list or "-" in new_list:
-        number_1:float
-        operand:str
-        number_2:float
-
-        if new_list[index] == "+" or new_list[index] == "-":
-            number_1 = float(new_list[index - 1])
-            number_2 = float(new_list[index + 1])
-            operand = new_list[index]
-
-            result:float = solve_operation(number_1, number_2, operand)
-
-            new_list.pop(index)
-            new_list.pop(index)
-            new_list[index - 1] = str(result)
-            index -= 2
-
-        index += 1
+        new_list = solve_MDAS(new_list, ["+", "-"])
 
     return new_list
 
