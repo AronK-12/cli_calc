@@ -18,7 +18,6 @@ def split_equation(eq:str) -> list:
     ['3', '+', '5', '*', '20']
     """
     eq_list:list = []
-
     current = ""
 
     for item in eq:
@@ -30,7 +29,6 @@ def split_equation(eq:str) -> list:
             current += item
 
     eq_list.append(current)
-
 
     return eq_list
 
@@ -88,7 +86,6 @@ def main():
                                 If you want to use spaces between symbols and numbers, 
                                 you have to wrap the argument between single or double quotes.''', 
                             type=str)
-
         args = parser.parse_args()
 
         splitted_equation = split_equation(args.equation)
@@ -98,8 +95,6 @@ def main():
     solved:float = float(solver(splitted_equation)[0])
 
     print(f'That equates to {round(solved, 2)}')
-
-
 
 if __name__ == '__main__':
     main()
