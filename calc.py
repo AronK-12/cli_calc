@@ -1,7 +1,7 @@
 import argparse
 
 debug_equation:str = "1+2-3*4 / 20"
-debug:bool = True
+debug:bool = False
 
 def split_equation(eq:str) -> list:
     """
@@ -50,7 +50,7 @@ def solve_operation(num1:float, num2:float, op:str) -> float:
 def solver(eq:list) -> list:
     new_list:list = eq
 
-    index = 0
+    index:int = 0
 
     while "*" in new_list or "/" in new_list:
         number_1:float
@@ -68,6 +68,27 @@ def solver(eq:list) -> list:
             new_list.pop(index)
             new_list[index - 1] = str(result)
             index -= 2
+        index += 1
+
+    index:int = 0
+
+    while "+" in new_list or "-" in new_list:
+        number_1:float
+        operand:str
+        number_2:float
+
+        if new_list[index] == "+" or new_list[index] == "-":
+            number_1 = float(new_list[index - 1])
+            number_2 = float(new_list[index + 1])
+            operand = new_list[index]
+
+            result:float = solve_operation(number_1, number_2, operand)
+
+            new_list.pop(index)
+            new_list.pop(index)
+            new_list[index - 1] = str(result)
+            index -= 2
+
         index += 1
 
     return new_list
@@ -88,9 +109,9 @@ def main():
     else:
         splitted_equation = split_equation(debug_equation)
 
-    solved = solver(splitted_equation)
+    solved:float = float(solver(splitted_equation)[0])
 
-    print(solved)
+    print(f'That equates to {round(solved, 2)}')
 
 
 
